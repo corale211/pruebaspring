@@ -48,23 +48,44 @@ public class RestTemplateController {
 		nombre = temp.findAll().get(temp.findAll().size() -1).getNombre_proyecto();
 		giturl = temp.findAll().get(temp.findAll().size() -1).getUrlgit();
 		
+		Process proceso;
+		  try {
+		   String[] cmd = { "sh", "/home/kali/prueba", correo};
+		   proceso = Runtime.getRuntime().exec(cmd); 
+		   proceso.waitFor(); 
+		   BufferedReader reader=new BufferedReader(new InputStreamReader(
+		    proceso.getInputStream())); 
+		   String line; 
+		   while((line = reader.readLine()) != null) { 
+		    System.out.println(line);
+		    LOG.info(line);
+		   } 
+		  } catch (IOException e) {
+		   // TODO Auto-generated catch block
+		   e.printStackTrace();
+		  } catch (InterruptedException e) {
+		   // TODO Auto-generated catch block
+		   e.printStackTrace();
+		  }
+
+		
 //		LOG.info("prueba correo2   "+correo);
 //		LOG.info("prueba nombre_Proyecto   "+nombre);
 //		LOG.info("prueba giturl   "+giturl);
 		
-		String command = "curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_motor_dev/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configdev.xml";
-		LOG.info("Curl  "+ command);
-		ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-		processBuilder.directory(new File("\\resources\\templates"));
-		
-		try {
-			Process process = processBuilder.start();
-			InputStream inputStream = process.getInputStream();
-			int exitCode = process.exitValue();
-		} catch (IOException e) {
+//		String command = "curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_motor_dev/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configdev.xml";
+//		LOG.info("Curl  "+ command);
+//		ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+//		processBuilder.directory(new File("\\resources\\templates"));
+//		
+//		try {
+//			Process process = processBuilder.start();
+//			InputStream inputStream = process.getInputStream();
+//			int exitCode = process.exitValue();
+//		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//			e.printStackTrace();
+//		}
 	
 		
 	}
