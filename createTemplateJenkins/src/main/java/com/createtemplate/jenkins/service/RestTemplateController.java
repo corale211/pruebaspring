@@ -40,17 +40,18 @@ public class RestTemplateController {
 	@PostMapping
 	public void insertar(@RequestBody templates tem) {
 		temp.save(tem);
-		shell();
+		Descargaxml();
 	}
 	
-	public void shell() {
-		correo = temp.findAll().get(temp.findAll().size() -1).getCorreo_lider();
+	public void Descargaxml() {
 		nombre = temp.findAll().get(temp.findAll().size() -1).getNombre_proyecto();
+		correo = temp.findAll().get(temp.findAll().size() -1).getCorreo_lider();
 		giturl = temp.findAll().get(temp.findAll().size() -1).getUrlgit();
+		
 		
 		Process proceso;
 		  try {
-		   String[] cmd = { "sh", "/home/kali/prueba", correo};
+		   String[] cmd = { "sh", "/home/kali/motores_android", nombre, correo, giturl};
 		   proceso = Runtime.getRuntime().exec(cmd); 
 		   proceso.waitFor(); 
 		   BufferedReader reader=new BufferedReader(new InputStreamReader(
@@ -67,31 +68,7 @@ public class RestTemplateController {
 		   // TODO Auto-generated catch block
 		   e.printStackTrace();
 		  }
-
-		
-//		LOG.info("prueba correo2   "+correo);
-//		LOG.info("prueba nombre_Proyecto   "+nombre);
-//		LOG.info("prueba giturl   "+giturl);
-		
-//		String command = "curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_motor_dev/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configdev.xml";
-//		LOG.info("Curl  "+ command);
-//		ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-//		processBuilder.directory(new File("\\resources\\templates"));
-//		
-//		try {
-//			Process process = processBuilder.start();
-//			InputStream inputStream = process.getInputStream();
-//			int exitCode = process.exitValue();
-//		} catch (IOException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	
 		
 	}
-	
-	
-	
-	
-	
+		
 }

@@ -1,0 +1,58 @@
+#!/bin/bash
+#echo "hello"
+
+NOMBREPROYECTO=$1
+CORREOS=$2
+URLGIT=$3
+
+
+echo $URLGIT
+echo $CORREOS
+echo $NOMBREPROYECTO
+
+#JOB DEV
+echo "curl"
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_motor_dev/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configdev.xml
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configdev.xml > configgdev.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgdev.xml > motoresandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file motoresandroid.xml > motoresandroiddev.xml
+rm -rf configdev.xml
+rm -rf configgdev.xml
+rm -rf motoresandroid.xml 
+
+NOMBREPROYECTODEV=$NOMBREPROYECTO+"dev"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTODEV --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @motoresandroiddev.xml -H "Content-Type:text/xml"
+
+rm -rf motoresandroiddev.xml
+
+ 
+#JOB QA
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_motor_qa/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configqa.xml
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configqa.xml > configgqa.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgqa.xml > motoresandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file motoresandroid.xml > motoresandroidqa.xml
+rm -rf configqa.xml
+rm -rf configgqa.xml
+rm -rf motoresandroid.xml
+
+NOMBREPROYECTOQA=$NOMBREPROYECTO+"qa"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTOQA --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @motoresandroidqa.xml -H "Content-Type:text/xml"
+rm -rf motoresandroidqa.xml
+
+#JOB RELEASE
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_motor_release/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configrelease.xml 
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configrelease.xml > configgrelease.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgrelease.xml > motoresandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file motoresandroid.xml > motoresandroidre.xml
+rm -rf configrelease.xml
+rm -rf configgrelease.xml
+rm -rf motoresandroid.xml
+
+NOMBREPROYECTORE=$NOMBREPROYECTO+"release"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTORE --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @motoresandroidre.xml -H "Content-Type:text/xml"
+
+rm -rf motoresandroidre.xml
+
