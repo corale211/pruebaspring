@@ -1,6 +1,6 @@
 # Creacion de templates en jenkins servicios post
 Creacion de jar
-mvn clean package
+mvn clean package -DskipTests
 
 Comando para la creacion de docker
 docker build -t createtemplatesjenkins .
