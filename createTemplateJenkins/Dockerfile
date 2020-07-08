@@ -3,12 +3,16 @@ RUN apt-get update && \
     apt-get install -y openjdk-8-jdk && \
     apt-get install -y ant && \
     apt-get clean
-RUN mkdir /home/kali
+RUN apt-get install -y sed
 RUN apt-get update && apt-get install -y \
 curl
-CMD /bin/bash
+RUN useradd -ms /bin/bash kali
+VOLUME [/home/kali]
+WORKDIR /home/kali
+RUN ["chmod","777","/home/kali","-R"]
+USER kali
 COPY sh/motores_android /home/kali
 COPY target/createTemplateJenkins-0.0.1.jar /home/kali
-WORKDIR /home/kali
-EXPOSE 8080
+CMD /bin/bash
 CMD ["java", "-jar", "/home/kali/createTemplateJenkins-0.0.1.jar"]
+
