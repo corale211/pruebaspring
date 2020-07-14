@@ -4,6 +4,7 @@
 NOMBREPROYECTO=$1
 CORREOS=$2
 URLGIT=$3
+CORREOQA=$4
 
 
 echo $URLGIT
@@ -46,10 +47,13 @@ curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftap
 
 sed "s+VALORURLGIT/+VALORURLGIT+g" file configrelease.xml > configgrelease.xml
 sed "s+VALORURLGIT+$URLGIT+g" file configgrelease.xml > motoresandroid.xml
-sed "s+VALORLTCORREO+$CORREOS+g" file motoresandroid.xml > motoresandroidre.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file motoresandroid.xml > motoresandroid1.xml
+sed "s+QACORREO+$CORREOQA+g" file motoresandroid1.xml > motoresandroidre.xml
+
 rm -rf configrelease.xml
 rm -rf configgrelease.xml
 rm -rf motoresandroid.xml
+rm -rf motoresandroid1.xml
 
 NOMBREPROYECTORE=$NOMBREPROYECTO+"release"
 curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTORE --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @motoresandroidre.xml -H "Content-Type:text/xml"

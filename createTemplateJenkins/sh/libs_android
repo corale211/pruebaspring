@@ -1,0 +1,62 @@
+#!/bin/bash
+#echo "hello"
+
+NOMBREPROYECTO=$1
+CORREOS=$2
+URLGIT=$3
+CORREOQA=$4
+
+
+echo $URLGIT
+echo $CORREOS
+echo $NOMBREPROYECTO
+
+#JOB DEV
+echo "curl"
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_libs_dev/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configdev.xml
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configdev.xml > configgdev.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgdev.xml > libsandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file libsandroid.xml > libsandroiddev.xml
+rm -rf configdev.xml
+rm -rf configgdev.xml
+rm -rf libsandroid.xml 
+
+NOMBREPROYECTODEV=$NOMBREPROYECTO+"dev"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTODEV --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @libsandroiddev.xml -H "Content-Type:text/xml"
+
+rm -rf libsandroiddev.xml
+
+ 
+#JOB QA
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_libs_qa/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configqa.xml
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configqa.xml > configgqa.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgqa.xml > libsandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file libsandroid.xml > libsandroidqa.xml
+rm -rf configqa.xml
+rm -rf configgqa.xml
+rm -rf libsandroid.xml
+
+NOMBREPROYECTOQA=$NOMBREPROYECTO+"qa"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTOQA --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @libsandroidqa.xml -H "Content-Type:text/xml"
+rm -rf libsandroidqa.xml
+
+#JOB RELEASE
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_libs_release/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configrelease.xml 
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configrelease.xml > configgrelease.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgrelease.xml > libsandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file libsandroid.xml > libsandroid1.xml
+sed "s+QACORREO+$CORREOQA+g" file libsandroid1.xml > libsandroidre.xml
+
+rm -rf configrelease.xml
+rm -rf configgrelease.xml
+rm -rf libsandroid.xml
+rm -rf libsandroid1.xml
+
+NOMBREPROYECTORE=$NOMBREPROYECTO+"release"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTORE --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @libsandroidre.xml -H "Content-Type:text/xml"
+
+rm -rf libsandroidre.xml
+

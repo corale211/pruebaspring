@@ -12,6 +12,8 @@ WORKDIR /home/kali
 RUN ["chmod","777","/home/kali","-R"]
 USER kali
 COPY sh/motores_android /home/kali
+COPY sh/app_android /home/kali
+COPY sh/libs_android /home/kali
 COPY target/createTemplateJenkins-0.0.1.jar /home/kali
 CMD /bin/bash
 CMD ["java", "-jar", "/home/kali/createTemplateJenkins-0.0.1.jar"]

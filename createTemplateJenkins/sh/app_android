@@ -1,0 +1,62 @@
+#!/bin/bash
+#echo "hello"
+
+NOMBREPROYECTO=$1
+CORREOS=$2
+URLGIT=$3
+CORREOQA=$4
+
+
+echo $URLGIT
+echo $CORREOS
+echo $NOMBREPROYECTO
+
+#JOB DEV
+echo "curl"
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_app_dev/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configdev.xml
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configdev.xml > configgdev.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgdev.xml > appandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file appandroid.xml > appandroiddev.xml
+rm -rf configdev.xml
+rm -rf configgdev.xml
+rm -rf appandroid.xml 
+
+NOMBREPROYECTODEV=$NOMBREPROYECTO+"dev"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTODEV --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @appandroiddev.xml -H "Content-Type:text/xml"
+
+rm -rf appandroiddev.xml
+
+ 
+#JOB QA
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_app_qa/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configqa.xml
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configqa.xml > configgqa.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgqa.xml > appandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file appandroid.xml > appandroidqa.xml
+rm -rf configqa.xml
+rm -rf configgqa.xml
+rm -rf appandroid.xml
+
+NOMBREPROYECTOQA=$NOMBREPROYECTO+"qa"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTOQA --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @appandroidqa.xml -H "Content-Type:text/xml"
+rm -rf appandroidqa.xml
+
+#JOB RELEASE
+curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/view/Templates_apk/job/template_app_release/config.xml --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 -o configrelease.xml 
+
+sed "s+VALORURLGIT/+VALORURLGIT+g" file configrelease.xml > configgrelease.xml
+sed "s+VALORURLGIT+$URLGIT+g" file configgrelease.xml > appandroid.xml
+sed "s+VALORLTCORREO+$CORREOS+g" file appandroid.xml > appandroid1.xml
+sed "s+QACORREO+$CORREOQA+g" file appandroid1.xml > appandroidre.xml
+
+rm -rf configrelease.xml
+rm -rf configgrelease.xml
+rm -rf appandroid.xml
+rm -rf appandroid1.xml
+
+NOMBREPROYECTORE=$NOMBREPROYECTO+"release"
+curl -s -XPOST https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftapps.com/createItem?name=$NOMBREPROYECTORE --user profudevops-admin-edit-view:119b3ae03225298d2837b62c27425971e3 --data-binary @appandroidre.xml -H "Content-Type:text/xml"
+
+rm -rf appandroidre.xml
+
