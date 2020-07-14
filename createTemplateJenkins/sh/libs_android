@@ -48,7 +48,7 @@ curl -X GET https://jenkins-devsecopsms.apps.paasprofuturo-d.r6b1.p1.openshiftap
 sed "s+VALORURLGIT/+VALORURLGIT+g" file configrelease.xml > configgrelease.xml
 sed "s+VALORURLGIT+$URLGIT+g" file configgrelease.xml > libsandroid.xml
 sed "s+VALORLTCORREO+$CORREOS+g" file libsandroid.xml > libsandroid1.xml
-sed "s+QACORREO+$CORREOQA+g" file libsandroid1.xml > libsandroidre.xml
+sed "s+VALORQACORREO+$CORREOQA+g" file libsandroid1.xml > libsandroidre.xml
 
 rm -rf configrelease.xml
 rm -rf configgrelease.xml
